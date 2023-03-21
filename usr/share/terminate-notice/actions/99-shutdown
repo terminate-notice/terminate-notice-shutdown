@@ -1,0 +1,23 @@
+#!/usr/bin/sh
+
+# shellcheck disable=SC1091
+. /usr/share/terminate-notice/helpers
+
+start_action "$(basename "$0")"
+
+eval "$(load_config shutdown)"
+
+# shellcheck disable=SC2154
+_shutdown_delay="$(first_of "$SHUTDOWN_DELAY" "$shutdown_delay" "now")"
+if [ -z "$_shutdown_delay" ]
+then
+    error 2 "$(basename "$0")" "No _shutdown_delay defined"
+fi
+
+# shellcheck disable=SC2154
+if [ "$(first_of "$NOSHUT" "$no_shut" "0")" = "0" ]
+then
+    /usr/sbin/shutdown -h "$_shutdown_delay"
+else
+    error 0 shutdown "Would shut down (halted by setting)"
+fi
