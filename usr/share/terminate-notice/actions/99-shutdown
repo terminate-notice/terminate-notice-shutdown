@@ -1,9 +1,10 @@
 #!/usr/bin/sh
+VERSION="#TAG# - #TAG_DATE#"
 
 # shellcheck disable=SC1091
 . /usr/share/terminate-notice/helpers
 
-start_action "$(basename "$0")"
+start_action "$(basename "$0")-$VERSION"
 
 eval "$(load_config shutdown)"
 
@@ -11,7 +12,7 @@ eval "$(load_config shutdown)"
 _shutdown_delay="$(first_of "$SHUTDOWN_DELAY" "$shutdown_delay" "now")"
 if [ -z "$_shutdown_delay" ]
 then
-    error 2 "$(basename "$0")" "No _shutdown_delay defined"
+    error 2 "$(basename "$0")-$VERSION" "No _shutdown_delay defined"
 fi
 
 # shellcheck disable=SC2154
@@ -19,5 +20,5 @@ if [ "$(first_of "$NOSHUT" "$no_shut" "0")" = "0" ]
 then
     /usr/sbin/shutdown -h "$_shutdown_delay"
 else
-    error 0 shutdown "Would shut down (halted by setting)"
+    error 0 "$(basename "$0")-$VERSION" "Would shut down (halted by setting)"
 fi
