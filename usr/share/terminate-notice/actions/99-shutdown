@@ -16,7 +16,20 @@ then
 fi
 
 # shellcheck disable=SC2154
-if [ "$(first_of "$NOSHUT" "$no_shut" "0")" = "0" ]
+_noshut="$(first_of "$NOSHUT" "$no_shut" "0")"
+if [ -z "$_noshut" ]
+then
+    error 2 "$(basename "$0")-$VERSION" "No _noshut value defined"
+fi
+
+if [ "$VERIFY" = "1" ]
+then
+    echo "Action $(basename "$0")-$VERSION - INFO: Verified at start."
+    exit 0
+fi
+
+# shellcheck disable=SC2154
+if [ "$_noshut" = "1" ]
 then
     /usr/sbin/shutdown -h "$_shutdown_delay"
 else
