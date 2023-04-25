@@ -39,7 +39,7 @@ verified "$(basename "$0")-$VERSION"
 
 # Now you can actually run the action, because all the variables have been defined and tested.
 # shellcheck disable=SC2154
-if [ "$_noshut" = "1" ]
+if [ "$_noshut" != "1" ]
 then
     /usr/sbin/shutdown -h "$_shutdown_delay"
 else
